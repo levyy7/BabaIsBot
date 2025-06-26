@@ -1,0 +1,50 @@
+{
+  "BABA": {
+    "description": "",
+    "last_rationale": ""
+  },
+  "PUSH": {
+    "description": "",
+    "last_rationale": ""
+  },
+  "FLAG": {
+    "description": "",
+    "last_rationale": ""
+  },
+  "STOP": {
+    "description": "",
+    "last_rationale": ""
+  },
+  "ROCK": {
+    "description": "",
+    "last_rationale": ""
+  },
+  "SKULL": {
+    "description": "",
+    "last_rationale": ""
+  },
+  "DEFEAT": {
+    "description": "",
+    "last_rationale": ""
+  },
+  "LAVA": {
+    "description": "",
+    "last_rationale": ""
+  },
+  "HOT": {
+    "description": "",
+    "last_rationale": ""
+  },
+  "MELT": {
+    "description": "",
+    "last_rationale": ""
+  },
+  "WIN": {
+    "description": "The 'WIN' block ends the game when the player's character (or 'YOU') touches it.",
+    "last_rationale": "Makes the subject block win the game when touched."
+  },
+  "YOU": {
+    "description": "Refers to the player's character. It can interact with other blocks, push, pull, and change rules when adjacent to them.",
+    "last_rationale": "The 'YOU' block represents the player's character, which is the primary agent for interacting with the game world."
+  }
+}

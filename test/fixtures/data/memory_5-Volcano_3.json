@@ -1,0 +1,50 @@
+{
+  "BABA": {
+    "description": "",
+    "last_rationale": ""
+  },
+  "PUSH": {
+    "description": "Makes the subject pushable by the player",
+    "last_rationale": ""
+  },
+  "FLAG": {
+    "description": "",
+    "last_rationale": ""
+  },
+  "STOP": {
+    "description": "Makes the subject impassable for the player",
+    "last_rationale": "The player should have moved down to (13,12) but remained at (13,11), indicating that the 'WALL IS STOP' rule is preventing BABA from crossing the tile."
+  },
+  "ROCK": {
+    "description": "",
+    "last_rationale": ""
+  },
+  "SKULL": {
+    "description": "",
+    "last_rationale": ""
+  },
+  "DEFEAT": {
+    "description": "Removes the subject from the game",
+    "last_rationale": "BABA's expected position is 'destroyed', indicating it has been defeated. This is because the SKULL is present at the expected position, and the 'SKULL IS DEFEAT' rule is active."
+  },
+  "LAVA": {
+    "description": "",
+    "last_rationale": ""
+  },
+  "HOT": {
+    "description": "",
+    "last_rationale": ""
+  },
+  "MELT": {
+    "description": "Makes the subject disappear on contact with lava",
+    "last_rationale": "BABA moved right onto lava and disappeared when touching it, indicating that the 'BABA IS MELT' rule is active and causing BABA to be destroyed by lava."
+  },
+  "WIN": {
+    "description": "Ends the game in a WIN when touching the subject.",
+    "last_rationale": "Makes the subject block win the game when touched."
+  },
+  "YOU": {
+    "description": "Makes the subject controllable by the player.",
+    "last_rationale": "The 'YOU' block represents the player's character, which is the primary agent for interacting with the game world."
+  }
+}
