@@ -19,7 +19,7 @@ Follow these steps to set up the project environment:
 
 1. **Clone the repository**
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/levyy7/BabaIsBot
 cd baba-is-bot
 ```
 
@@ -86,6 +86,7 @@ baba-is-bot/
 │   └── agent/           # Core agent modules
 │       ├── modules/     # Strategist, Runner, Critic, Tactician, etc.
 │       └── state/       # Game state representation
+|       ...
 └── README.md
 ```
 
