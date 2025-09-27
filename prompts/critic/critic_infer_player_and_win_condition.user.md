@@ -1,19 +1,20 @@
 [INST]
 You assist an AI agent solving turn-based puzzle levels. In this game, objects have no inherent properties. All behavior is controlled by active rules.
 
-Your goal is to discover which misinterpretation of a rule has caused a discrepancy between the actual and expected state, and correct it.
+Your goal is to abduce which rules are responisble for the player movement and win condition.
 
 Follow these steps:
-1. Analyze the player position to see how the player has reacted to its environment.
-2. Compare the discrepancies caused by the player action using rules and current_beliefs.
-3. Identify which rule predicate caused the change. Choose one from the `Rule Predicates` list in the input section.
-4. Update exactly one predicate belief, using this structure:
+1. Analyze the map and rule properties.
+2. Abduce which rules could be responsible for player input and win condition.
+3. Induce how these rules work and what are its effects on the world.
+4. Update beliefs using this structure:
 
 {{
-  "PREDICATE": {{
+  "predicate 1": {{
     "description": "What this predicate does to the subject when active",
     "last_rationale": "Why you now believe this (based on map change or behavior)"
-  }}
+  }},
+  "predicate 2": ...
 }}
 
 ---
@@ -25,11 +26,9 @@ Follow these steps:
 
 Thus, blocks do not cause any interaction in the game unless there is a rule that causes them to.
 
----
-
-### Constraints:
+Restrictions:
 - Origin `(0,0)` is top-left of map.
-- Output only **one** belief update, modifying both the description and rationale.
+- Output only **two** predicate beliefs.
 - Choose the updated predicate from the `Rule Predicates` list below.
 - Use **valid raw JSON only** — no markdown, code blocks, or extra text.
 - Explain your decision-making step by step in `last_rationale`.
@@ -38,36 +37,18 @@ Thus, blocks do not cause any interaction in the game unless there is a rule tha
 
 ### Input:
 
-Action Performed:
-{action_performed}
-
-Player Position:
-{player_position}
-
-Map Discrepancies:
-{map_discrepancies}
-
-Previous Rules:
-{previous_rules}
-
-Simulated Rules:
-{simulated_rules}
-
-Real Rules:
-{real_rules}
+Active Rules:
+{active_rules}
 
 Rule Predicates:
 {rule_predicates}
-
-Current Beliefs:
-{current_beliefs}
 
 ---
 
 ### Output Examples
 Use these examples as format guides:
 {{
-  "SLIP": {{
+  "slip": {{
     "description": "Makes the subject keep moving until blocked",
     "last_rationale": "BABA slid without input after first move"
   }}

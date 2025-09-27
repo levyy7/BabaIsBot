@@ -1,5 +1,6 @@
 .venv
 .idea
-models
-test/outputs
+/models
+/src/agent/modules/memory/data
+/test/outputs
 .env

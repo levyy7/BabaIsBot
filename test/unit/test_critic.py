@@ -7,21 +7,45 @@ import time
 from src.modules.core.critic import Critic
 from src.state import State
 from src.modules.nl_processor import LocalLLMClient, GeminiClient
-from tests.fixtures.fixtures_memory import MemoryStub, fixtures_memory_0_0, fixtures_memory_4_0, fixtures_memory_4_1, \
-    fixtures_memory_5_0, fixtures_memory_5_1, fixtures_memory_5_3
-from tests.fixtures.fixtures_state import DummyState, fixtures_state_0_0, fixtures_state_4_0, fixtures_state_4_1, \
-    fixtures_state_5_0, fixtures_state_5_1, fixtures_state_5_2
+from tests.fixtures.fixtures_memory import (
+    MemoryStub,
+    fixtures_memory_0_0,
+    fixtures_memory_4_0,
+    fixtures_memory_4_1,
+    fixtures_memory_5_0,
+    fixtures_memory_5_1,
+    fixtures_memory_5_3,
+)
+from tests.fixtures.fixtures_state import (
+    DummyState,
+    fixtures_state_0_0,
+    fixtures_state_4_0,
+    fixtures_state_4_1,
+    fixtures_state_5_0,
+    fixtures_state_5_1,
+    fixtures_state_5_2,
+)
 
 
-@pytest.mark.parametrize("test_id,action,memory_fixture_name,state_fixture_name", [
-    # ("unexpected_wall_hit", "MOVE_DOWN", "fixtures_memory_0_0", "fixtures_state_0_0"),
-    # ("unexpected_defeat", "MOVE RIGHT", "fixtures_memory_4_0", "fixtures_state_4_0"),
-    # ("unexpected_chain_push", "MOVE UP", "fixtures_memory_4_1", "fixtures_state_4_1"),
-    ("unexpected_hot_melt", "MOVE RIGHT", "fixtures_memory_5_0", "fixtures_state_5_0"),
-    # ("unexpected_rock_to_lava", "MOVE LEFT", "fixtures_memory_5_1", "fixtures_state_5_1"),
-    # ("main_experiment", "MOVE RIGHT", "fixtures_memory_5_3", "fixtures_state_5_2"),
-])
-def test_critic_initiate_beliefs_single(test_id, action, memory_fixture_name, state_fixture_name, request):
+@pytest.mark.parametrize(
+    "test_id,action,memory_fixture_name,state_fixture_name",
+    [
+        # ("unexpected_wall_hit", "MOVE_DOWN", "fixtures_memory_0_0", "fixtures_state_0_0"),
+        # ("unexpected_defeat", "MOVE RIGHT", "fixtures_memory_4_0", "fixtures_state_4_0"),
+        # ("unexpected_chain_push", "MOVE UP", "fixtures_memory_4_1", "fixtures_state_4_1"),
+        (
+            "unexpected_hot_melt",
+            "MOVE RIGHT",
+            "fixtures_memory_5_0",
+            "fixtures_state_5_0",
+        ),
+        # ("unexpected_rock_to_lava", "MOVE LEFT", "fixtures_memory_5_1", "fixtures_state_5_1"),
+        # ("main_experiment", "MOVE RIGHT", "fixtures_memory_5_3", "fixtures_state_5_2"),
+    ],
+)
+def test_critic_initiate_beliefs_single(
+    test_id, action, memory_fixture_name, state_fixture_name, request
+):
     memory_fixture = request.getfixturevalue(memory_fixture_name)
     state_fixture = request.getfixturevalue(state_fixture_name)
 
@@ -49,26 +73,63 @@ def test_critic_initiate_beliefs_single(test_id, action, memory_fixture_name, st
 
         # Save result
         with output_path.open("w") as f:
-            json.dump({
-                "test_id": test_id,
-                "timestamp": timestamp,
-                "iteration": i,
-                "action": action,
-                "result": result,
-            }, f, indent=4)
+            json.dump(
+                {
+                    "test_id": test_id,
+                    "timestamp": timestamp,
+                    "iteration": i,
+                    "action": action,
+                    "result": result,
+                },
+                f,
+                indent=4,
+            )
 
-@pytest.mark.parametrize("test_id,action,memory_fixture_name,state_fixture_name", [
-    ("unexpected_wall_hit", "MOVE_DOWN", "fixtures_memory_0_0", "fixtures_state_0_0"),
-    ("unexpected_defeat", "MOVE RIGHT", "fixtures_memory_4_0", "fixtures_state_4_0"),
-    ("unexpected_chain_push", "MOVE UP", "fixtures_memory_4_1", "fixtures_state_4_1"),
-    ("unexpected_hot_melt", "MOVE RIGHT", "fixtures_memory_5_0", "fixtures_state_5_0"),
-    ("unexpected_rock_to_lava", "MOVE LEFT", "fixtures_memory_5_1", "fixtures_state_5_1"),
-])
-def test_critic_initiate_beliefs_feedback(test_id, action, memory_fixture_name, state_fixture_name, request):
+
+@pytest.mark.parametrize(
+    "test_id,action,memory_fixture_name,state_fixture_name",
+    [
+        (
+            "unexpected_wall_hit",
+            "MOVE_DOWN",
+            "fixtures_memory_0_0",
+            "fixtures_state_0_0",
+        ),
+        (
+            "unexpected_defeat",
+            "MOVE RIGHT",
+            "fixtures_memory_4_0",
+            "fixtures_state_4_0",
+        ),
+        (
+            "unexpected_chain_push",
+            "MOVE UP",
+            "fixtures_memory_4_1",
+            "fixtures_state_4_1",
+        ),
+        (
+            "unexpected_hot_melt",
+            "MOVE RIGHT",
+            "fixtures_memory_5_0",
+            "fixtures_state_5_0",
+        ),
+        (
+            "unexpected_rock_to_lava",
+            "MOVE LEFT",
+            "fixtures_memory_5_1",
+            "fixtures_state_5_1",
+        ),
+    ],
+)
+def test_critic_initiate_beliefs_feedback(
+    test_id, action, memory_fixture_name, state_fixture_name, request
+):
     memory_fixture = request.getfixturevalue(memory_fixture_name)
     state_fixture = request.getfixturevalue(state_fixture_name)
 
-    output_dir = Path("test") / "outputs" / "critic_prompt_method_evaluation" / "feedback"
+    output_dir = (
+        Path("test") / "outputs" / "critic_prompt_method_evaluation" / "feedback"
+    )
     output_dir.mkdir(parents=True, exist_ok=True)
     # methods = ["single", "feedback", "repetition"]
 
@@ -92,26 +153,63 @@ def test_critic_initiate_beliefs_feedback(test_id, action, memory_fixture_name, 
 
         # Save result
         with output_path.open("w") as f:
-            json.dump({
-                "test_id": test_id,
-                "timestamp": timestamp,
-                "iteration": i,
-                "action": action,
-                "result": result,
-            }, f, indent=4)
+            json.dump(
+                {
+                    "test_id": test_id,
+                    "timestamp": timestamp,
+                    "iteration": i,
+                    "action": action,
+                    "result": result,
+                },
+                f,
+                indent=4,
+            )
 
-@pytest.mark.parametrize("test_id,action,memory_fixture_name,state_fixture_name", [
-    ("unexpected_wall_hit", "MOVE_DOWN", "fixtures_memory_0_0", "fixtures_state_0_0"),
-    ("unexpected_defeat", "MOVE RIGHT", "fixtures_memory_4_0", "fixtures_state_4_0"),
-    ("unexpected_chain_push", "MOVE UP", "fixtures_memory_4_1", "fixtures_state_4_1"),
-    ("unexpected_hot_melt", "MOVE RIGHT", "fixtures_memory_5_0", "fixtures_state_5_0"),
-    ("unexpected_rock_to_lava", "MOVE LEFT", "fixtures_memory_5_1", "fixtures_state_5_1"),
-])
-def test_critic_initiate_beliefs_repetition(test_id, action, memory_fixture_name, state_fixture_name, request):
+
+@pytest.mark.parametrize(
+    "test_id,action,memory_fixture_name,state_fixture_name",
+    [
+        (
+            "unexpected_wall_hit",
+            "MOVE_DOWN",
+            "fixtures_memory_0_0",
+            "fixtures_state_0_0",
+        ),
+        (
+            "unexpected_defeat",
+            "MOVE RIGHT",
+            "fixtures_memory_4_0",
+            "fixtures_state_4_0",
+        ),
+        (
+            "unexpected_chain_push",
+            "MOVE UP",
+            "fixtures_memory_4_1",
+            "fixtures_state_4_1",
+        ),
+        (
+            "unexpected_hot_melt",
+            "MOVE RIGHT",
+            "fixtures_memory_5_0",
+            "fixtures_state_5_0",
+        ),
+        (
+            "unexpected_rock_to_lava",
+            "MOVE LEFT",
+            "fixtures_memory_5_1",
+            "fixtures_state_5_1",
+        ),
+    ],
+)
+def test_critic_initiate_beliefs_repetition(
+    test_id, action, memory_fixture_name, state_fixture_name, request
+):
     memory_fixture = request.getfixturevalue(memory_fixture_name)
     state_fixture = request.getfixturevalue(state_fixture_name)
 
-    output_dir = Path("test") / "outputs" / "critic_prompt_method_evaluation" / "repetition"
+    output_dir = (
+        Path("test") / "outputs" / "critic_prompt_method_evaluation" / "repetition"
+    )
     output_dir.mkdir(parents=True, exist_ok=True)
     # methods = ["single", "feedback", "repetition"]
 
@@ -135,10 +233,14 @@ def test_critic_initiate_beliefs_repetition(test_id, action, memory_fixture_name
 
         # Save result
         with output_path.open("w") as f:
-            json.dump({
-                "test_id": test_id,
-                "timestamp": timestamp,
-                "iteration": i,
-                "action": action,
-                "result": result,
-            }, f, indent=4)
+            json.dump(
+                {
+                    "test_id": test_id,
+                    "timestamp": timestamp,
+                    "iteration": i,
+                    "action": action,
+                    "result": result,
+                },
+                f,
+                indent=4,
+            )

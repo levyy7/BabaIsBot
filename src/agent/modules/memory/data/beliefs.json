@@ -1,0 +1,14 @@
+{
+    "you": {
+        "description": "Allows the player to control the subject",
+        "last_rationale": "The player can control BABA, as indicated by the rule 'baba IS you'."
+    },
+    "win": {
+        "description": "The subject must be touched by the player to win the level",
+        "last_rationale": "The game is won when BABA touches FLAG, as indicated by the rule 'flag IS win'."
+    },
+    "push": {
+        "description": "The subject can be pushed by the player if the player is YOU",
+        "last_rationale": "The rock was not pushed onto the tile as predicted. It instead transformed into Baba. This suggests the rock is being destroyed and Baba is being created. Since BABA IS YOU, it is likely this transformation is dependent on YOU being present. Therefore, PUSH should only allow pushing if the subject is pushed by something that IS YOU."
+    }
+}
