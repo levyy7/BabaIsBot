@@ -1,6 +1,10 @@
 # Baba Is Bot
 
-**Baba Is Bot** is an AI agent that plays the puzzle game *Baba Is You* by learning rules, simulating actions, and updating its beliefs. This project demonstrates AI reasoning, planning, and environment interaction in Python.
+**Baba Is Bot** is an AI agent that plays the puzzle game *Baba Is You* by learning rules and simulating actions autonomously.
+
+
+https://github.com/user-attachments/assets/8aa9813a-c29a-4ebb-a438-b863adcb33f9
+
 
 ---
 
