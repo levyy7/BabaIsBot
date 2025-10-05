@@ -5,7 +5,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # === DETECT OS AND SET GAME DIRECTORY ===
 case "$(uname -s)" in
     Linux*)
-        GAME_DIR="$HOME/.local/share/BabaIsYou"
+        GAME_DIR="$HOME/.steam/debian-installation/steamapps/common/Baba Is You"
         ;;
     Darwin*)
         GAME_DIR="$HOME/Library/Application Support/BabaIsYou"

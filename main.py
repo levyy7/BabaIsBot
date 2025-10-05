@@ -1,6 +1,8 @@
 import os
 import threading
 from pathlib import Path
+from time import sleep
+
 from dotenv import load_dotenv
 
 from src.api.app import app
@@ -27,6 +29,9 @@ if __name__ == "__main__":
 
     baba_api_thread = threading.Thread(target=run_baba_api, daemon=True)
     baba_api_thread.start()
+
+    print("Waiting for baba api to start...")
+    sleep(3)
 
     agent = Agent(baba_host_url=f"http://localhost:{BABA_LOCALHOST_PORT}", llm_host_url=LLM_HOST_ADDRESS)
     agent.run(load_stored_beliefs=False, load_stored_step_function=False)
