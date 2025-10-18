@@ -31,9 +31,9 @@ if __name__ == "__main__":
     baba_api_thread.start()
 
     print("Waiting for baba api to start...")
-    sleep(3)
+    sleep(1000000)
 
-    agent = Agent(baba_host_url=f"http://localhost:{BABA_LOCALHOST_PORT}", llm_host_url=LLM_HOST_ADDRESS)
-    agent.run(load_stored_beliefs=False, load_stored_step_function=False)
-
-    delete_commands_from_command_dir()
+    # agent = Agent(baba_host_url=f"http://localhost:{BABA_LOCALHOST_PORT}", llm_host_url=LLM_HOST_ADDRESS)
+    # agent.run(load_stored_beliefs=False, load_stored_step_function=False)
+    #
+    # delete_commands_from_command_dir()

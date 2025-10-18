@@ -9,13 +9,13 @@ class Tactician:
     def __init__(
         self,
         state_transition_function: Callable[[State, Action], State],
-        goal_condition_function: Callable[[State], bool],
+        goal_condition_function: Callable[[list[tuple[State, Action]], State], bool],
     ):
         self.state_transition_function = state_transition_function
         self.goal_condition_function = goal_condition_function
 
     def plan(
-        self, start_state: State, max_depth: Optional[int] = None
+            self, start_state: State, max_depth: Optional[int] = None
     ) -> Optional[List[Action]]:
         """
         Performs a BFS search starting from `start_state` using the provided `actions`.
@@ -25,32 +25,32 @@ class Tactician:
         :param max_depth: Optional depth limit to prevent infinite loops.
         """
         queue = deque()
-        visited: Set[State] = set()
+        visited: set[State] = set()
 
-        # Each element in queue is (current_state, path_taken)
+        # Each element in queue is (current_state, trajectory)
+        # trajectory: List[Tuple[State, Action]]
         queue.append((start_state, []))
         visited.add(start_state)
 
         print(f"[Tactician] Computing plan...")
 
         while queue:
-            current_state, path = queue.popleft()
+            current_state, trajectory = queue.popleft()
 
             # print(repr(current_state))
             # print(current_state.kind_to_properties)
-            # print("ACTIONS: " + str(path))
+            # print("TRAJECTORY: " + str(trajectory))
             # print("STATE: " + str(start_state))
             # print("STATE: " + str(current_state))
 
-            # Check if goal reached
-            if self.goal_condition_function(current_state):
+            if self.goal_condition_function(trajectory, current_state):
+                path = [action for state, action in trajectory]
                 print(
                     f"[Tactician] Concluded plan: {list(map(lambda a: a.name, path))}"
                 )
                 return path
 
-            # Depth check
-            if max_depth is not None and len(path) >= max_depth:
+            if max_depth is not None and len(trajectory) >= max_depth:
                 continue
 
             # Explore neighbors
@@ -61,6 +61,9 @@ class Tactician:
 
                 if next_state not in visited:
                     visited.add(next_state)
-                    queue.append((next_state, path + [action]))
+
+                    new_trajectory = trajectory + [(current_state, action)]
+
+                    queue.append((next_state, new_trajectory))
 
         return None

@@ -1,60 +1,43 @@
 [INST]
-You assist an AI agent solving turn-based puzzle levels. In this game, objects have no inherent properties. All behavior is controlled by active rules.
+You assist an AI agent solving a puzzle game.
 
-Your task is to generate goals with the objective of testing if a belief about a rule (predicate) is correct.
+Your task is to generate goals with the objective of testing if a hypothesis about the game behaviour is correct.
 
 ### Instructions:
 
-1. Analyze the target belief. Identify what the predicate is expected to do and which entities it should interact with.
-2. Consider scenarios where the predicate might behave unexpectedly with other rules, especially including the player itself.
+1. Analyze the hypothesis to be tested. Reason about how new belief could interact with the existing knowledge.
+2. Consider how the hypothesis and the existing knowledge could affect actions in the current state.
 3. For each goal, specify:
-   - A **description** of the setup and reasoning.
-   - The **expected_result** if the belief is correct.
-
-[
-  {{
-    "description": "...",
-    "expected_result": "..."
-  }}, ...
-]
-
-### Rule Format:
-
-The beliefs are a list of predicate descriptions, where predicates cause behaviors when used in rules:
-
-- Structure: `<SUBJECT> IS <PREDICATE>`
-- Predicate defines behavior, like movement or transformation.
-- Subject references the block that the predicate affects.
-
-Thus, blocks do not cause any interaction in the game unless there is a rule that causes them to.
+   - A goal to test if the given hypothesis is correct, framed in the scope of the current state
+   - The expected result if the belief turns out to be correct.
 
 ### Output Format:
 
-You must return **exactly two** goals in **raw JSON format only**, no markdown or explanation.
+You must return exactly two goals in raw JSON format only, no markdown or explanation.
 
 The format must be:
 [
   {{
-    "description": Step-by-step reasoning and setup, using **only generic references** like "a subject with PREDICATE" or "an entity with YOU".,
+    "goal": The goal, explained particularly for this state.
     "expected_result": The outcome that should occur if the belief is correct.
   }}, ...
 ]
 
 ### Constraints:
-- Avoid referencing specific object names.
-- Focus on rules and their interactions: refer to objects only through their assigned predicates.
-- Mention clearly which predicates are active and their effects.
-- Ensure all output is valid JSON with exactly two elements.
+- Focus on knowledge and their interactions with the hypothesis.
 
 ---
 
 ### Input:
 
-Belief to Test:
-{belief_to_test}
+Hypothesis to Test:
+{hypothesis}
 
-Current Beliefs:
-{current_beliefs}
+Current Knowledge:
+{knowledge}
+
+Game State:
+{state}
 
 ---
 

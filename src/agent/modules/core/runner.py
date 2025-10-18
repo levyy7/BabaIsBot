@@ -39,7 +39,7 @@ class Runner:
         self.memory = memory
         self.memory.replace_step_function(step_plugin_code)
 
-    def run(self, state: State, action: Action) -> State:
+    def run_step_function(self, state: State, action: Action) -> State:
         """
         Compute the next game state given current state and an action.
         """
@@ -49,6 +49,18 @@ class Runner:
                 return self._exec_step_function(state_copy, action)
             except Exception as e:
                 self._handle_step_function_error(e)
+
+
+    def run_goal_condition(self, trajectory: list[tuple[State, Action]], current_state: State) -> bool:
+        local_env: Dict[str, Any] = {
+            "State": State,
+            "Block": Block,
+            "Action": Action,
+            "Outcome": Outcome,
+        }
+        exec(self.memory.get_goal_condition_function(), local_env)
+        goal_condition_function = local_env["goal_condition_completed"]
+        return goal_condition_function(trajectory, current_state)
 
     def _exec_step_function(self, state: State, action: Action) -> State:
         """

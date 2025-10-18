@@ -1,6 +1,6 @@
 import os
 import time
-from google import genai
+# from google import genai
 from dotenv import load_dotenv, find_dotenv
 from src.agent.modules.nl_processor import LLMClient
 
@@ -24,7 +24,7 @@ class GeminiClient(LLMClient):
                 "Google Gemini API key must be provided or set in GEMINI_API_KEY"
             )
         # Lazy import to avoid dependency issues
-        self.client = genai.Client(api_key=self.api_key)
+        self.client = None #genai.Client(api_key=self.api_key)
         self._last_call_time = time.time()
 
     def get_completion(
