@@ -10,15 +10,13 @@ class LLMClient(ABC):
         self.base_url = host
 
     @abstractmethod
-    def get_completion(
-        self,
-        user_prompt: str,
-        system_prompt: str,
-        mode: str = "chat",
-        max_new_tokens: int = 256,
-        temperature: float = 0.7,
-        top_p: float = 1.0,
-        model: str = "models/gemini-2.5-flash",
+    def get_instruct_completion(
+            self,
+            prompt: str,
+            max_new_tokens: int = 512,
+            temperature: float = 0.6,
+            top_p: float = 0.95,
+            top_k: int = 20,
     ) -> str:
         """
         Abstract method: Chat-style completion. Must be implemented by subclasses.

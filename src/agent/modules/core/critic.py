@@ -41,18 +41,18 @@ class Critic:
             return {}
 
     def _analyze(
-        self,
-        prompt_format: BasePrompt,
-        action_performed: str,
-        previous: State,
-        simulated: State,
-        real: State,
-        **kwargs,
+            self,
+            prompt_format: BasePrompt,
+            action_performed: str,
+            previous: State,
+            simulated: State,
+            real: State,
+            **kwargs,
     ) -> Dict[str, Any]:
 
         player_pos = lambda state: (
-            f"X={state.get_blocks_for('BABA')[0].x} Y={state.get_blocks_for('BABA')[0].y}"
-            if state.get_blocks_for("BABA")
+            f"X={state.get_blocks_by_name('BABA')[0].x} Y={state.get_blocks_for('BABA')[0].y}"
+            if state.get_blocks_by_name("BABA")
             else "destroyed"
         )
         player_position_info = (
@@ -79,12 +79,11 @@ class Critic:
             **kwargs,
         )
 
-        result = self.llm_client.get_completion(
-            user_prompt=user_prompt,
-            system_prompt=system_prompt,
-            max_new_tokens=256,
-            temperature=0.5,
-            model="models/gemini-2.0-flash",
+        result = self.llm_client.get_instruct_completion(
+            prompt=user_prompt,
+            temperature=0.15,
+            top_p=0.8,
+            top_k=20,
         )
 
         json_result = self._parse_json_result(result)
@@ -93,7 +92,7 @@ class Critic:
         return json_result
 
     def analyze_single(
-        self, action: str, previous: State, simulated: State, real: State
+            self, action: str, previous: State, simulated: State, real: State
     ) -> Dict[str, Any]:
         """
         Compare simulated vs. real state and update memory with new beliefs.
@@ -109,11 +108,11 @@ class Critic:
             rule_predicates=str(rule_predicates),
         )
 
-        result = self.llm_client.get_completion(
-            user_prompt=user_prompt,
-            system_prompt=system_prompt,
-            max_new_tokens=256,
-            temperature=0.5,
+        result = self.llm_client.get_instruct_completion(
+            prompt=user_prompt,
+            temperature=0.15,
+            top_p=0.8,
+            top_k=20,
         )
 
         json_result = self._parse_json_result(result)

@@ -10,34 +10,14 @@ from src.agent.modules.memory.memory import Memory
 from src.agent.modules.nl_processor.prompts.runner_prompt import (
     RunnerNewBeliefPrompt,
     RunnerErrorPrompt,
+    RunnerIncorrectStateTransitionPrompt
 )
-
-step_plugin_code = """
-def step(state: State, action: Action) -> State:
-    dx, dy = {
-        Action.STILL: (0, 0),
-        Action.UP: (-1, 0),
-        Action.DOWN: (1, 0),
-        Action.LEFT: (0, -1),
-        Action.RIGHT: (0, 1),
-    }[action]
-
-    for row in state.grid:
-        for cell in row:
-            for block in cell:
-                nx, ny = (block.x + dx, block.y + dy)  # new block position after action
-                # ...
-
-    state.outcome = Outcome.ONGOING
-    return state 
-"""
 
 
 class Runner:
     def __init__(self, llm_client: LLMClient, memory: Memory):
         self.llm_client = llm_client
         self.memory = memory
-        self.memory.replace_step_function(step_plugin_code)
 
     def run(self, state: State, action: Action) -> State:
         """
@@ -92,6 +72,11 @@ class Runner:
             RunnerErrorPrompt(), error_message=error_message
         )
 
+    def update_step_function_with_incorrect_state_transition(self, belief_to_implement: str, previous_state: State, action: Action, correct_state: State, failed_state: State) -> None:
+        self._update_step_function_with_llm(
+            RunnerIncorrectStateTransitionPrompt(), belief_to_implement=belief_to_implement, previous_state=previous_state, action=action, failed_state=failed_state
+        )
+
     def _update_step_function_with_llm(
         self, prompt_format: BasePrompt, **kwargs
     ) -> None:
@@ -103,10 +88,11 @@ class Runner:
             step_function=self.memory.get_step_function(), **kwargs
         )
 
-        result = self.llm_client.get_completion(
-            user_prompt=user_prompt,
-            system_prompt=system_prompt,
-            max_new_tokens=512,
+        result = self.llm_client.get_instruct_completion(
+            prompt=user_prompt,
+            temperature=0.15,
+            top_p=0.8,
+            top_k=30,
         )
 
         # Extract Python code block from LLM response

@@ -1,7 +1,7 @@
 [INST]
 You assist an AI agent solving turn-based puzzle levels. In this game, objects have no inherent properties. All behavior is controlled by active rules.
 
-Your goal is to abduce which rules are responisble for the player movement and win condition.
+Your goal is to abduce which rules are responsible for the player movement and win condition.
 
 Follow these steps:
 1. Analyze the map and rule properties.
@@ -28,7 +28,7 @@ Thus, blocks do not cause any interaction in the game unless there is a rule tha
 
 Restrictions:
 - Origin `(0,0)` is top-left of map.
-- Output only **two** predicate beliefs.
+- Output beliefs only regarding the player movement and win condition.
 - Choose the updated predicate from the `Rule Predicates` list below.
 - Use **valid raw JSON only** — no markdown, code blocks, or extra text.
 - Explain your decision-making step by step in `last_rationale`.

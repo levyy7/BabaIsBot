@@ -64,7 +64,7 @@ def read_world_state():
 def get_next_command_file():
     k = 0
     while True:
-        path = os.path.join(COMMANDS_DIR, f"{k}.lua")
+        path = os.path.join(BABA_COMMANDS_DIR, f"{k}.lua")
         if not os.path.exists(path):
             return path
         k += 1

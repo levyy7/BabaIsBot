@@ -20,10 +20,10 @@ class Agent:
         self.actuator = Actuator(baba_host_url=baba_host_url)
 
         self.runner = Runner(
-            llm_client=LocalLLMClient(llm_host_url=llm_host_url), memory=self.memory
+            llm_client=LocalLLMClient(base_url=llm_host_url), memory=self.memory
         )
         self.critic = Critic(
-            llm_client=LocalLLMClient(llm_host_url=llm_host_url), memory=self.memory
+            llm_client=LocalLLMClient(base_url=llm_host_url), memory=self.memory
         )
         self.tactician = Tactician(
             state_transition_function=self.runner.run,
@@ -32,9 +32,10 @@ class Agent:
         # self.strategist = Strategist()  # To be integrated later
 
     def run(
-        self, load_stored_beliefs: bool = True, load_stored_step_function: bool = True
+        self, baba_map_id: int, load_stored_beliefs: bool = True, load_stored_step_function: bool = True
     ) -> List:
-        print("Running Agent...")
+        print(f"Running Agent for map ID {baba_map_id}...")
+        self.actuator.load_level(baba_map_id)
 
         if load_stored_beliefs:
             self.memory.load_beliefs()
@@ -58,7 +59,7 @@ class Agent:
         return action_list
 
     def _execute_action_sequence(
-        self, initial_state: State, action_list: List
+        self, initial_state: State, action_list: list
     ) -> State:
         simulated_state = initial_state
         real_state = initial_state
@@ -79,21 +80,61 @@ class Agent:
         return real_state
 
     def _update_beliefs_on_mismatch(
-        self, action, previous_state: State, simulated_state: State, real_state: State
+            self, action, previous_state: State, simulated_state: State, real_state: State
     ) -> State:
+        """
+        This function is called when a contradiction (belief mismatch) is detected.
+        """
+
+        # 1. Get New Knowledge
         new_belief = self.critic.analyze_single(
             action=action.name,
             previous=previous_state,
             simulated=simulated_state,
             real=real_state,
         )
+
+        # 2. Generate new Code
         self.runner.update_step_function_with_new_belief(str(new_belief))
-        simulated_state = self.runner.run(previous_state, action)
 
-        while simulated_state != real_state:
-            self.runner.update_step_function_with_incorrect_state_transition(
-                previous_state, simulated_state, real_state
+        # 3. Test the New Code
+        current_simulated_state = self.runner.run(previous_state, action)
+
+        # 4. Code Debug Loop
+        max_debug_attempts = 5
+        debug_attempts = 0
+
+        while current_simulated_state != real_state:
+            # Check if the Coder LLM is stuck.
+            if debug_attempts >= max_debug_attempts:
+                print(f"CRITICAL: Failed to debug step function for belief: {new_belief}")
+                print("This rule is likely flawed, contradictory, or impossible.")
+                raise Exception("Code debug loop failed. Knowledge is likely flawed.")
+
+            print(f"Debug attempt {debug_attempts + 1}: Code is buggy. Retrying...")
+
+            # ---------------------------------------------------------------
+            # ▼▼▼ THIS IS THE MOST IMPORTANT CHANGE ▼▼▼
+            # ---------------------------------------------------------------
+            #
+            # We DON'T just show it the bad transition.
+            # We tell it: "Your *implementation* of [SPEC] is wrong.
+            # Fix the *code* to match the *spec*."
+            #
+            # You must create this new method on your `runner` class.
+            self.runner.update_step_function_with_new_belief(
+                belief_to_implement=str(new_belief),
+                previous_state=previous_state,
+                action=action,
+                failed_state=current_simulated_state,
+                correct_state=real_state
             )
-            simulated_state = self.runner.run(previous_state, action)
 
-        return simulated_state
+            debug_attempts += 1
+
+            # 5. Re-test the newly fixed code
+            current_simulated_state = self.runner.run(previous_state, action)
+
+        # If we exit the loop, it means:
+        # current_simulated_state == real_state
+        return current_simulated_state
