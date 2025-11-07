@@ -3,22 +3,32 @@ import json
 from typing import Any
 
 
+_default_step_function = """
+def step(state: State, action: Action) -> State:
+    dx, dy = {
+        Action.STILL: (0, 0),
+        Action.UP: (-1, 0),
+        Action.DOWN: (1, 0),
+        Action.LEFT: (0, -1),
+        Action.RIGHT: (0, 1),
+    }[action]
+    
+    # Place logic here
+    
+    return state
+"""
+
 class Memory:
     _instance = None
 
     memory = {}
-
-    # def __new__(cls, *args, **kwargs):
-    #     if cls._instance is None:
-    #         cls._instance = cls()
-    #     return cls._instance
 
     def __init__(self):
         if not hasattr(self, "_initialized"):  # Ensure initialization only happens once
             self._initialized = True
 
         self.rule_beliefs: dict[str, Any] = {}
-        self.step_function: str = ""
+        self.step_function: str = _default_step_function
 
         base_dir = os.path.dirname(os.path.abspath(__file__))
         self.data_dir = os.path.join(base_dir, "data")

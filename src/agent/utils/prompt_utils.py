@@ -22,14 +22,14 @@ def format_tile_diffs(
 
     for x in range(len(previous.grid)):
         for y in range(len(previous.grid[0])):
-            if simulated.get_cell(x, y) != real.get_cell(x, y):
+            if simulated.get_blocks_in_cell(x, y) != real.get_blocks_in_cell(x, y):
                 previous_kinds = list(
-                    map(lambda block: block.kind, previous.get_cell(x, y))
+                    map(lambda block: block.kind, previous.get_blocks_in_cell(x, y))
                 )
                 simulated_kinds = list(
-                    map(lambda block: block.kind, simulated.get_cell(x, y))
+                    map(lambda block: block.kind, simulated.get_blocks_in_cell(x, y))
                 )
-                real_kinds = list(map(lambda block: block.kind, real.get_cell(x, y)))
+                real_kinds = list(map(lambda block: block.kind, real.get_blocks_in_cell(x, y)))
 
                 lines.append(f"Differences at X={x},Y={y}:")
                 lines.append(f"  - pre-action              : {previous_kinds}")

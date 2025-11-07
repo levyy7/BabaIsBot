@@ -10,7 +10,7 @@ class Actuator:
         self.send_actions([action])
 
     def send_actions(self, actions: list[Action]) -> None:
-        actions_str = ",".join(map(lambda a: a.name.lower(), actions))
+        actions_str = [action.name for action in actions]
         print(f"Sending actions: {actions_str}")
         self.client.execute_commands(actions_str)
 
@@ -18,4 +18,7 @@ class Actuator:
         self.client.undo_multiple(num_actions)
 
     def restart_level(self) -> None:
-        self.client.execute_commands("restart_instant")
+        self.client.restart_level()
+
+    def load_level(self, level_id: int) -> None:
+        self.client.enter_level(level_id)

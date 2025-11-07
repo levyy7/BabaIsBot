@@ -25,7 +25,7 @@ class Tactician:
         :param max_depth: Optional depth limit to prevent infinite loops.
         """
         queue = deque()
-        visited: Set[State] = set()
+        visited: set[State] = set()
 
         # Each element in queue is (current_state, path_taken)
         queue.append((start_state, []))

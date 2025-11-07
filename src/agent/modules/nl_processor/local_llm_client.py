@@ -5,46 +5,50 @@ from src.agent.modules.nl_processor import LLMClient
 
 class LocalLLMClient(LLMClient):
     """
-    LLMClient for local inference
+    LLMClient for OpenAI-compatible /v1/completions endpoint
     """
 
-    def __init__(self, llm_host_url: str):
-        super().__init__(host=llm_host_url)
-        self.headers = {"Content-Type": "application/json"}
+    def __init__(self, base_url: str, api_key: str = None):
+        super().__init__(host=base_url)
+        self.api_key = api_key
+        self.headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {self.api_key}",
+        }
 
-    def get_completion(
-            self,
-            user_prompt: str,
-            system_prompt: str = "You are a helpful assistant.",
-            mode: str = "instruct",
-            max_new_tokens: int = 256,
-            temperature: float = 0.4,
-            top_p: float = 1.0,
-            model: Optional[str] = None,
+    def get_instruct_completion(
+        self,
+        prompt: str,
+        max_new_tokens: int = 2048,
+        temperature: float = 0.6,
+        top_p: float = 0.95,
+        top_k: int = 20,
+        model: Optional[str] = None,
     ) -> str:
-        url = self.base_url
+        """
+        Sends a completion request to an OpenAI-compatible /v1/completions endpoint.
+        """
+        url = f"{self.base_url}/v1/completions"
+
         payload = {
-            "prompt": f"{system_prompt}\n{user_prompt}",
+            "prompt": prompt,
             "max_tokens": max_new_tokens,
             "temperature": temperature,
             "top_p": top_p,
-            "mode": mode,
-            "stream": False,  # disables "thinking..." streaming
-            "num_return_sequences": 1,  # single answer
+            "top_k": top_k,
         }
+
         if model:
             payload["model"] = model
 
         try:
-            print(payload)
-            response = requests.post(url, json=payload, headers=self.headers, timeout=300)
+            response = requests.post(url, json=payload, headers=self.headers, timeout=600)
             response.raise_for_status()
             data = response.json()
 
-            # text-generation-webui returns text in data["results"][0]["text"]
-            if "results" in data and len(data["results"]) > 0:
-                print(data["results"][0]["text"])
-                return data["results"][0].get("text", "").strip()
+            # text-generation-webui returns text under data["choices"][0]["text"]
+            if "choices" in data and len(data["choices"]) > 0:
+                return data["choices"][0].get("text", "").strip()
             else:
                 print(f"[LocalLLMClient] Unexpected API response: {data}")
                 return ""

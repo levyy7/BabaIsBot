@@ -17,15 +17,9 @@ class BABAClient:
         headers["Content-Type"] = "application/json"
         return headers
 
-    def game_rules(self, topic="basic"):
-        url = f"{self.base_url}/game_rules"
-        payload = {"topic": topic}
-        response = requests.get(url, params=payload, headers=self._headers())
-        return response.text
-
-    def enter_level(self, level):
-        url = f"{self.base_url}/enter_level"
-        payload = {"level": level}
+    def enter_level(self, level_id):
+        url = f"{self.base_url}/load_level"
+        payload = {"level_id": level_id}
         response = requests.post(url, json=payload, headers=self._headers())
         return response.text
 
@@ -34,7 +28,7 @@ class BABAClient:
         response = requests.get(url, headers=self._headers())
         return response.text[5:-6]
 
-    def execute_commands(self, commands):
+    def execute_commands(self, commands: list):
         url = f"{self.base_url}/execute_commands"
         payload = {"commands": commands}
         response = requests.post(url, json=payload, headers=self._headers())
