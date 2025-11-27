@@ -1,0 +1,10 @@
+{
+  "BABA IS YOU": {
+    "reasoning": "This rule defines the player's avatar as BABA, allowing the player to control BABA's movement. Without this rule, there would be no way for the player to interact with the game world.",
+    "description": "The rule 'BABA IS YOU' assigns the player's control to the BABA object, making it the controllable entity in the game."
+  },
+  "FLAG IS WIN": {
+    "reasoning": "This rule defines the win condition as touching the FLAG object. When the player-controlled BABA touches the FLAG, the game ends in victory.",
+    "description": "The rule 'FLAG IS WIN' sets the win condition to be met when the player-controlled entity (YOU) touches the FLAG object."
+  }
+}

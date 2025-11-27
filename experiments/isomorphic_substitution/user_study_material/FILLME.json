@@ -1,0 +1,37 @@
+{
+  "0-stop": {
+    "base": [],
+    "break_semantics": [],
+    "break_semantics_and_syntax": [],
+    "break_syntax": [],
+    "rephrase": []
+  },
+  "1-defeat": {
+    "base": [],
+    "break_semantics": [],
+    "break_semantics_and_syntax": [],
+    "break_syntax": [],
+    "rephrase": []
+  },
+  "2-push": {
+    "base": [],
+    "break_semantics": [],
+    "break_semantics_and_syntax": [],
+    "break_syntax": [],
+    "rephrase": []
+  },
+  "3-sink": {
+    "base": [],
+    "break_semantics": [],
+    "break_semantics_and_syntax": [],
+    "break_syntax": [],
+    "rephrase": []
+  },
+  "4-hot_melt": {
+    "base": [],
+    "break_semantics": [],
+    "break_semantics_and_syntax": [],
+    "break_syntax": [],
+    "rephrase": []
+  }
+}

@@ -1,60 +1,37 @@
-[INST]
-You assist an AI agent solving turn-based puzzle levels. In this game, objects have no inherent properties. All behavior is controlled by active rules.
+You assist an AI agent in understanding the laws of an unknown world. All behavior is controlled by certain rules.
 
-Your goal is to abduce which rules are responsible for the player movement and win condition.
+Your goal is to discover which rule makes the agent interact with the game and which one makes it win.
 
-Follow these steps:
+### Steps:
 1. Analyze the map and rule properties.
-2. Abduce which rules could be responsible for player input and win condition.
+2. Abduct which rules could be responsible for player input and win condition.
 3. Induce how these rules work and what are its effects on the world.
-4. Update beliefs using this structure:
+4. Update two beliefs, using the structure below:
 
 {{
-  "predicate 1": {{
-    "description": "What this predicate does to the subject when active",
-    "last_rationale": "Why you now believe this (based on map change or behavior)"
-  }},
-  "predicate 2": ...
+  "<Rule_ID>": {{
+    "reasoning": "Why you now believe this (based on map change or behavior)",
+    "description": "How does this rule affect the world? Try ~~to generalize~~"
+  }}
 }}
 
----
-
-### Rule Format
-- Structure: `<SUBJECT> IS <PREDICATE>`
-- Predicate defines behavior, like movement or transformation.
-- Subject references the block that the predicate affects.
-
-Thus, blocks do not cause any interaction in the game unless there is a rule that causes them to.
-
-Restrictions:
+### Constraints:
 - Origin `(0,0)` is top-left of map.
-- Output beliefs only regarding the player movement and win condition.
-- Choose the updated predicate from the `Rule Predicates` list below.
+- Try to generalize rule behavior as much as possible.
+- Output only **two** belief update, one for the interaction and another for the win condition.
 - Use **valid raw JSON only** — no markdown, code blocks, or extra text.
-- Explain your decision-making step by step in `last_rationale`.
+- Explain your decision-making step by step in `reasoning`.
 
 ---
 
 ### Input:
 
 Active Rules:
-{active_rules}
-
-Rule Predicates:
-{rule_predicates}
-
----
-
-### Output Examples
-Use these examples as format guides:
-{{
-  "slip": {{
-    "description": "Makes the subject keep moving until blocked",
-    "last_rationale": "BABA slid without input after first move"
-  }}
-}}
+- BABA IS YOU
+- WALL IS STOP
+- FLAG IS WIN
+- ROCK IS PUSH
 
 ---
 
 Your output:
-[/INST]

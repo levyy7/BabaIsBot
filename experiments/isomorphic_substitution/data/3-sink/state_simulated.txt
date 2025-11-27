@@ -1,0 +1,18 @@
+y/x |     1     |     2     |   3   |   4   |   5   |   6   |     7      |   8   |   9   |     10     |   11  |   12  |   13  |     14    |    15   |     16    |   17  |   18  |   19  |   20  |   21  |   22
+----+-----------+-----------+-------+-------+-------+-------+------------+-------+-------+------------+-------+-------+-------+-----------+---------+-----------+-------+-------+-------+-------+-------+------
+1   | text_baba | text_wall | wall  |       |       |       |            |       |       |            |       |       |       |           |         |           | grass |       |       |       |       |
+2   | text_is   | text_is   | wall  |       | grass |       |            | wall  | wall  | wall       | wall  | wall  | wall  | wall      | wall    |           | grass |       |       |       |       |
+3   | text_you  | text_stop | wall  |       |       |       |            | wall  | tile  | tile       | tile  | tile  | tile  | tile      | wall    |           |       |       |       |       |       |
+4   | wall      | wall      | wall  |       |       | grass |            | wall  | tile  |            | tile  | tile  | rock  | tile      | wall    |           |       |       |       |       |       |
+5   |           |           |       |       |       |       | text_water | wall  | tile  | tile       | tile  | tile  | tile  | tile      | wall    |           |       |       |       |       |       |
+6   |           |           |       | grass | grass |       | text_is    | wall  | tile  | tile       | tile  | tile  | rock  | tile      | wall    |           |       |       |       |       |       |
+7   |           |           |       |       |       |       | text_sink  | wall  | tile  | tile       | tile  | tile  | tile  | tile      | wall    |           |       |       |       |       |       |
+8   | grass     |           |       |       | wall  | wall  | wall       | wall  | water | water,baba | water | wall  | wall  | wall      | wall    | wall      | wall  | wall  |       | grass |       |
+9   |           | grass     |       |       | wall  |       |            |       |       |            |       | wall  |       |           |         |           |       | wall  |       |       |       |
+10  |           |           |       |       | wall  |       |            |       |       |            |       | wall  |       | text_rock | text_is | text_push |       | wall  |       |       | grass |
+11  |           |           |       |       | wall  |       |            |       |       |            |       | wall  |       |           |         |           |       | wall  |       |       |       |
+12  |           |           |       |       | wall  | water | water      | water |       | wall       |       |       |       |           |         |           |       | wall  |       |       |       |
+13  |           | grass     | grass |       | wall  | water | water      | water |       |            |       | wall  |       | text_flag | text_is | text_win  |       | wall  | grass |       |       |
+14  |           | grass     | grass |       | wall  | flag  | water      | water |       |            |       | wall  |       |           |         |           |       | wall  |       |       | grass | grass
+15  |           |           |       |       | wall  | wall  | wall       | wall  | wall  | wall       | wall  | wall  | wall  | wall      | wall    | wall      | wall  | wall  |       |       | grass |
+16  |           |           |       |       |       |       |            |       |       |            |       |       |       |           |         |           |       |       |       |       |       |

@@ -113,15 +113,6 @@ class Agent:
 
             print(f"Debug attempt {debug_attempts + 1}: Code is buggy. Retrying...")
 
-            # ---------------------------------------------------------------
-            # ▼▼▼ THIS IS THE MOST IMPORTANT CHANGE ▼▼▼
-            # ---------------------------------------------------------------
-            #
-            # We DON'T just show it the bad transition.
-            # We tell it: "Your *implementation* of [SPEC] is wrong.
-            # Fix the *code* to match the *spec*."
-            #
-            # You must create this new method on your `runner` class.
             self.runner.update_step_function_with_new_belief(
                 belief_to_implement=str(new_belief),
                 previous_state=previous_state,

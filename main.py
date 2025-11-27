@@ -13,7 +13,7 @@ from src.agent.agent import Agent
 load_dotenv()
 
 BABA_COMMANDS_DIR = Path(os.getenv("BABA_COMMANDS_DIR"))
-BABA_LOCALHOST_PORT = int(os.getenv("BABA_LOCALHOST_PORT"))
+BABA_LOCALHOST_PORT = 5000
 LLM_HOST_ADDRESS = os.getenv("LLM_HOST_ADDRESS")
 
 LEVELS_TO_TEST = {
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     baba_api_thread.start()
 
     print("Waiting for baba api to start...")
-    sleep(3)
+    sleep(1000000)
 
     agent = Agent(f"http://localhost:{BABA_LOCALHOST_PORT}", llm_host_url=LLM_HOST_ADDRESS)
     agent.run(baba_map_id=0, load_stored_beliefs=False, load_stored_step_function=False)

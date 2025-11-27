@@ -1,38 +1,26 @@
-[INST]
-You assist an AI agent solving turn-based puzzle levels. In this game, objects have no inherent properties. All behavior is controlled by active rules.
+You assist an AI agent in understanding the laws of an unknown world. All behavior is controlled by certain rules.
 
 Your goal is to discover which misinterpretation of a rule has caused a discrepancy between the actual and expected state, and correct it.
 
-Follow these steps:
+### Steps:
 1. Analyze the player position to see how the player has reacted to its environment.
 2. Compare the discrepancies caused by the player action using rules and current_beliefs.
-3. Identify which rule predicate caused the change. Choose one from the `Rule Predicates` list in the input section.
-4. Update exactly one predicate belief, using this structure:
+3. Abduct which rule has caused the observed behavior.
+4. Update one belief, using the structure below:
 
 {{
-  "PREDICATE": {{
-    "description": "What this predicate does to the subject when active",
-    "last_rationale": "Why you now believe this (based on map change or behavior)"
+  "<Rule>": {{
+    "reasoning": "Why you now believe this (based on map change or behavior)",
+    "description": "How does this rule affect the world?"
   }}
 }}
 
----
-
-### Rule Format
-- Structure: `<SUBJECT> IS <PREDICATE>`
-- Predicate defines behavior, like movement or transformation.
-- Subject references the block that the predicate affects.
-
-Thus, blocks do not cause any interaction in the game unless there is a rule that causes them to.
-
----
-
 ### Constraints:
 - Origin `(0,0)` is top-left of map.
+- Try to generalize rule behavior as much as possible.
 - Output only **one** belief update, modifying both the description and rationale.
-- Choose the updated predicate from the `Rule Predicates` list below.
 - Use **valid raw JSON only** — no markdown, code blocks, or extra text.
-- Explain your decision-making step by step in `last_rationale`.
+- Explain your decision-making step by step in `reasoning`.
 
 ---
 
@@ -40,9 +28,6 @@ Thus, blocks do not cause any interaction in the game unless there is a rule tha
 
 Action Performed:
 {action_performed}
-
-Player Position:
-{player_position}
 
 Map Discrepancies:
 {map_discrepancies}
@@ -64,16 +49,4 @@ Current Beliefs:
 
 ---
 
-### Output Examples
-Use these examples as format guides:
-{{
-  "SLIP": {{
-    "description": "Makes the subject keep moving until blocked",
-    "last_rationale": "BABA slid without input after first move"
-  }}
-}}
-
----
-
 Your output:
-[/INST]

@@ -19,13 +19,9 @@ def step(state: State, action: Action) -> State:
 """
 
 class Memory:
-    _instance = None
-
-    memory = {}
 
     def __init__(self):
-        if not hasattr(self, "_initialized"):  # Ensure initialization only happens once
-            self._initialized = True
+        memory = {}
 
         self.rule_beliefs: dict[str, Any] = {}
         self.step_function: str = _default_step_function
