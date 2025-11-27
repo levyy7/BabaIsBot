@@ -8,12 +8,12 @@ Your goal is to discover which rule has caused a discrepancy between the simulat
 3. Abduct which active rule has caused the observed behavior.
 4. Update or add one belief between the observed ones, using the structure below:
 
-{{
-  "<Rule>": {{
+{
+  "<Rule>": {
     "reasoning": "Why you now believe this (based on map change or behavior)",
     "description": "How does this rule affect the world?"
-  }}
-}}
+  }
+}
 
 ### Constraints:
 - Origin `(0,0)` is top-left of map.
@@ -21,42 +21,37 @@ Your goal is to discover which rule has caused a discrepancy between the simulat
 - Output only **one** belief update, modifying both the description and rationale.
 - Output a valid JSON only, using the provided structure — no markdown, code blocks, or extra text.
 - Explain your decision-making step by step, briefly, in `reasoning`.
+- Shapes represent unknown objects.
+- Colors represent unknown properties.
 
 ---
 
 ### Input:
 
 Action Performed:
-{action}
+RIGHT
 
 Map Discrepancies:
-{map_discrepancies}
+- Differences at X=10,Y=13:
+- pre-action              : TRIANGLE
+- post-action (real)      : TRIANGLE
+- post-action (simulated) : TRIANGLE,CIRCLE
 
 Active Rules:
-{active_rules}
+- GREEN X CIRCLE
+- TRIANGLE X CYAN
+- HEX X YELLOW
+- SQUARE X BLUE
 
 Current Beliefs:
-{current_beliefs}
-
----
-
-Your output:
-
-
-
-### Input:
-
-Action Performed:
-{action_performed}
-
-Map Discrepancies:
-{map_discrepancies}
-
-Active Rules:
-{active_rules}
-
-Current Beliefs:
-{current_beliefs}
+{
+  "GREEN X CIRCLE": {
+    "description": "The rule 'GREEN X CIRCLE' assigns the player's control to the CIRCLE object, making it the controllable entity in the game."
+  },
+  "HEX X YELLOW": {
+    "description": "The rule 'HEX X YELLOW' sets the win condition to be met when the player-controlled entity (GREEN) touches the HEX object."
+  }
+}
 
 ---
 

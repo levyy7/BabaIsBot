@@ -50,17 +50,6 @@ class Critic:
             **kwargs,
     ) -> Dict[str, Any]:
 
-        player_pos = lambda state: (
-            f"X={state.get_blocks_by_name('BABA')[0].x} Y={state.get_blocks_for('BABA')[0].y}"
-            if state.get_blocks_by_name("BABA")
-            else "destroyed"
-        )
-        player_position_info = (
-            f"BABA - Pre-Action Position              : {player_pos(previous)}\n"
-            f"     - Post-Action (simulated) Position : {player_pos(simulated)}\n"
-            f"     - Post-Action (real) Position      : {player_pos(real)}"
-        )
-
         map_discrepancies = format_tile_diffs(previous, simulated, real)
         print("[Critic] Analyzing encountered discrepancy:\n", map_discrepancies)
 
@@ -68,14 +57,10 @@ class Critic:
         context_beliefs = self._get_context_beliefs(rule_predicates)
 
         system_prompt, user_prompt = prompt_format.format(
-            action_performed=action_performed,
-            player_position=player_position_info,
+            action=action_performed,
             map_discrepancies=map_discrepancies,
             previous_rules=previous.print_rules(),
-            simulated_rules=simulated.print_rules(),
-            real_rules=real.print_rules(),
             current_beliefs=str(context_beliefs),
-            rule_predicates=str(rule_predicates),
             **kwargs,
         )
 
@@ -105,7 +90,6 @@ class Critic:
         rule_predicates = self._get_rule_predicates({state})
         system_prompt, user_prompt = CriticInferPlayerAndWinCondition().format(
             active_rules=state.print_rules(),
-            rule_predicates=str(rule_predicates),
         )
 
         result = self.llm_client.get_instruct_completion(
