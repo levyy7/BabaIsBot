@@ -66,7 +66,7 @@ class Critic:
 
         result = self.llm_client.get_instruct_completion(
             prompt=user_prompt,
-            temperature=0.15,
+            temperature=0.3,
             top_p=0.8,
             top_k=20,
         )

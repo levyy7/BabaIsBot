@@ -188,4 +188,4 @@ property_types = [
 
 def noun_references_to(noun: str) -> str:
 
-    return noun.removeprefix("text_")
+    return noun.removeprefix("TEXT_")

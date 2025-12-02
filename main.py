@@ -36,7 +36,7 @@ if __name__ == "__main__":
     baba_api_thread.start()
 
     print("Waiting for baba api to start...")
-    sleep(1000000)
+    sleep(3)
 
     agent = Agent(f"http://localhost:{BABA_LOCALHOST_PORT}", llm_host_url=LLM_HOST_ADDRESS)
     agent.run(baba_map_id=0, load_stored_beliefs=False, load_stored_step_function=False)

@@ -1,4 +1,3 @@
-[INST]
 You assist an AI agent solving turn-based puzzle levels. In this game, objects have no inherent properties. All behavior is controlled by active rules.
 
 Thus, unless a rule states otherwise, all positions are reachable and non-blocking.
@@ -52,5 +51,3 @@ def step(state: State, action: Action) -> State:
 
     return state
 ```
-
-[/INST]

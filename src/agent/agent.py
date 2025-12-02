@@ -1,16 +1,18 @@
 from typing import List
 
-from src.agent.modules.core import Strategist, Tactician, Runner, Critic
+from src.agent.log.agent_log import AgentLog
+from src.agent.modules.core import Strategist, Runner, Critic
+from src.agent.modules.core.planner.bfs_planner import BFSPlanner
 from src.agent.modules.environment.perception.perceptor import Perceptor
 from src.agent.modules.environment.actuation.actuator import Actuator
 from src.agent.modules.nl_processor import LocalLLMClient
-from src.agent.state import Outcome, State
+from src.agent.state import Outcome, State, Action
 from src.agent.modules.memory.memory import Memory
 
 
 # Using mock until integration with Strategist module is complete
-def goal_condition_mock(state: State) -> bool:
-    return state.outcome == Outcome.WIN
+def goal_validator(trajectory: list[tuple[State, Action]], current_state: State) -> bool:
+    return current_state.outcome == Outcome.WIN
 
 
 class Agent:
@@ -25,16 +27,23 @@ class Agent:
         self.critic = Critic(
             llm_client=LocalLLMClient(base_url=llm_host_url), memory=self.memory
         )
-        self.tactician = Tactician(
+        self.planner = BFSPlanner(
             state_transition_function=self.runner.run,
-            goal_condition_function=goal_condition_mock,
+            goal_condition_function=goal_validator,
         )
-        # self.strategist = Strategist()  # To be integrated later
+        #self.strategist = Strategist(
+        #)  # To be integrated later
+
+        self.current_level_id: int = None
+
+        self.logs: list[AgentLog] = []
+        self.prompt_counter = 0
 
     def run(
         self, baba_map_id: int, load_stored_beliefs: bool = True, load_stored_step_function: bool = True
     ) -> List:
         print(f"Running Agent for map ID {baba_map_id}...")
+        self.current_level_id = baba_map_id
         self.actuator.load_level(baba_map_id)
 
         if load_stored_beliefs:
@@ -49,7 +58,7 @@ class Agent:
                 str(self.memory.rule_beliefs)
             )
 
-            action_list = self.tactician.plan(start_state=initial_state, max_depth=10)
+            action_list = self.planner.plan(start_state=initial_state, max_depth=10)
             real_state = self._execute_action_sequence(initial_state, action_list)
 
             if real_state.outcome == Outcome.WIN:
@@ -129,3 +138,23 @@ class Agent:
         # If we exit the loop, it means:
         # current_simulated_state == real_state
         return current_simulated_state
+
+    def _log_event(self, module: str, goal: str):
+        """Helper to create and append a log entry."""
+        self.prompt_counter += 1
+
+        # We assume memory holds the current state of beliefs and code
+        # You might need to adjust 'self.memory.step_function_source' to whatever
+        # variable actually holds the raw string of the python code in your Memory class.
+        current_code = getattr(self.memory, 'step_function_source', "N/A")
+
+        log_entry = AgentLog(
+            prompt_number=self.prompt_counter,
+            level_id=self.current_level_id,
+            model_name=self.model_name,
+            module=module,
+            current_goal=goal,
+            current_step_function=current_code,
+            current_beliefs=self.memory.rule_beliefs  # Assumes this is a dict
+        )
+        self.logs.append(log_entry)

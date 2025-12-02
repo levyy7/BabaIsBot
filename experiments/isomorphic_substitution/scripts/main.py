@@ -15,8 +15,6 @@ if __name__ == '__main__':
     base_experiment = BaseExperiment("http://192.168.0.30:5000")
 
     for scenario, state_condition in product(SCENARIOS, STATE_CONDITIONS):
-        if scenario != '4-hot_melt':
-            continue
 
         prompt_path = BASE_PATH / scenario / 'prompts' / f'{state_condition}.md'
         with open(prompt_path) as f:
