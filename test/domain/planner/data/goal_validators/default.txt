@@ -1,0 +1,2 @@
+def goal_validator(trajectory: list[tuple[State, Action]], current_state: State) -> bool:
+    return current_state.outcome == Outcome.WIN

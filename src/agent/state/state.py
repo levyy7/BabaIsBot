@@ -44,7 +44,7 @@ class State:
             for y_index, cell in enumerate(cell_values):
                 if cell:
                     for name in cell.split(","):
-                        grid[x_index][y_index].append(Block(name, x_index, y_index))
+                        grid[x_index][y_index].append(Block(name.upper(), x_index, y_index))
 
         return cls(grid)
 
@@ -192,11 +192,11 @@ class State:
                 kinds2 = self._get_kinds(x, y + 1)
                 kinds3 = self._get_kinds(x, y + 2)
 
-                if "text_is" in kinds2:
+                if "TEXT_IS" in kinds2:
                     for noun in kinds1:
                         for prop in kinds3:
-                            if noun in noun_types and prop in (noun_types + property_types):
-                                self._add_rule(kind_to_properties, noun_references_to(noun), prop.removeprefix("text_"))
+                            if noun.lower() in noun_types and prop.lower() in (noun_types + property_types):
+                                self._add_rule(kind_to_properties, noun_references_to(noun), prop.removeprefix("TEXT_"))
 
         # Vertical rules
         for x in range(rows - 2):
@@ -205,19 +205,19 @@ class State:
                 kinds2 = self._get_kinds(x + 1, y)
                 kinds3 = self._get_kinds(x + 2, y)
 
-                if "IS" in kinds2:
+                if "TEXT_IS" in kinds2:
                     for noun in kinds1:
                         for prop in kinds3:
-                            if noun in noun_types and prop in (noun_types + property_types):
-                                self._add_rule(kind_to_properties, noun_references_to(noun), prop.removeprefix("text_"))
+                            if noun.lower() in noun_types and prop.lower() in (noun_types + property_types):
+                                self._add_rule(kind_to_properties, noun_references_to(noun), prop.removeprefix("TEXT_"))
 
         # "text_*" blocks are pushable
         for x in range(rows):
             for y in range(cols):
                 kinds = self._get_kinds(x, y)
                 for kind in kinds:
-                    if kind.startswith("text_"):
-                        self._add_rule(kind_to_properties, kind, "push")
+                    if kind.startswith("TEXT_"):
+                        self._add_rule(kind_to_properties, kind, "PUSH")
 
         return kind_to_properties
 

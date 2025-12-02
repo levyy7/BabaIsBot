@@ -1,0 +1,20 @@
+y/x |   1   |   2   |   3   |   4   |   5   |   6   |   7   |     8     |     9     |   10  |   11  |   12  |     13    |   14  |   15  |    16    |   17  |   18  |   19  |   20  |   21  |   22  |   23  |   24
+----+-------+-------+-------+-------+-------+-------+-------+-----------+-----------+-------+-------+-------+-----------+-------+-------+----------+-------+-------+-------+-------+-------+-------+-------+------
+1   |       |       |       |       |       |       |       |           |           |       |       |       |           |       |       |          |       |       |       |       |       |       |       |
+2   |       |       |       |       |       |       |       |           | tile      |       |       |       |           |       |       |          |       |       |       |       |       |       |       |
+3   |       |       | tile  |       |       |       |       |           |           |       | flag  | flag  | flag      | flag  | flag  | flag     | flag  | flag  |       |       |       |       | tile  |
+4   |       |       |       |       |       | tile  |       |           |           |       | flag  |       |           |       |       |          |       | flag  | tile  |       |       |       |       |
+5   |       |       |       |       |       | tile  |       |           |           |       | flag  |       | text_is   |       |       |          |       | flag  |       | tile  |       |       |       |
+6   |       |       |       |       |       |       |       |           |           |       | flag  |       |           |       |       |          |       | flag  |       |       |       |       |       |
+7   |       |       |       |       |       |       | flag  | flag      | flag      | flag  | flag  |       |           |       |       | text_win |       | flag  |       |       |       |       |       |
+8   |       |       |       |       |       |       | flag  | grass     | grass     | grass | grass |       |           |       |       |          |       | flag  |       |       |       |       |       |
+9   |       |       | tile  |       |       |       | flag  | grass     | text_baba | grass | grass |       |           |       |       |          |       | flag  |       |       |       |       |       |
+10  |       | tile  |       |       |       |       | flag  | grass     | grass     | grass | grass |       |           |       |       |          |       | flag  |       |       |       | tile  |       |
+11  |       |       |       |       |       |       | flag  | flag      | flag      | flag  | flag  | flag  | flag      | flag  | flag  | flag     | flag  | flag  |       |       |       |       |       |
+12  |       |       |       |       |       |       |       |           |           |       | flag  |       |           |       |       |          |       | flag  |       |       |       |       |       |
+13  |       |       |       |       |       |       |       | text_wall |           |       | flag  |       | text_flag |       |       |          |       | flag  |       |       |       |       |       |
+14  |       |       |       |       |       |       |       | text_is   |           |       | flag  |       | text_is   |       |       | wall     |       | flag  |       |       |       |       |       |
+15  |       |       |       |       | tile  |       |       | text_you  |           |       | flag  |       | text_stop |       |       |          |       | flag  |       | tile  |       |       |       |
+16  |       |       |       |       |       |       |       |           |           |       | flag  |       |           |       | flag  | flag     | flag  | flag  | tile  |       |       |       |       |
+17  |       |       |       |       |       | tile  |       |           |           |       | flag  | flag  | flag      | flag  | flag  |          |       |       | tile  |       |       |       |       |
+18  |       |       |       |       |       |       |       |           |           |       |       |       |           |       |       |          |       |       |       |       |       |       |       |

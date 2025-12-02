@@ -1,0 +1,151 @@
+def step(state: State, action: Action) -> State:
+    dx, dy = {
+        Action.STILL: (0, 0),
+        Action.UP: (-1, 0),
+        Action.DOWN: (1, 0),
+        Action.LEFT: (0, -1),
+        Action.RIGHT: (0, 1),
+    }[action]
+
+    # 2. MOVEMENT PHASE (YOU, STOP, PUSH)
+    # Only process movement if there is a direction
+    if dx != 0 or dy != 0:
+        # Get all blocks that are currently 'YOU'
+        you_blocks = state.get_blocks_by_property("YOU")
+
+        # Sort blocks to handle pushing order somewhat gracefully (though simultaneous is ideal)
+        # We process movement for every YOU block
+
+        # To prevent double moving or conflicts, we calculate all moves first, then execute.
+        # However, due to the provided API constraints, we will process them sequentially
+        # but ensure we don't move the same block instance twice if it was pushed.
+
+        moved_blocks_ids = set()
+
+        for you_block in you_blocks:
+            if you_block in moved_blocks_ids:
+                continue
+
+            # --- Logic for PUSH and STOP ---
+            # We need to build a chain of blocks to move.
+            # Chain starts with the YOU block.
+            move_chain = [you_block]
+            blocked = False
+
+            curr_x, curr_y = you_block.x, you_block.y
+
+            # Look ahead to see how long the push chain is
+            while True:
+                next_x = curr_x + dx
+                next_y = curr_y + dy
+
+                # Check what is in the next cell
+                blocks_in_next = state.get_blocks_in_cell(next_x, next_y)
+
+                cell_is_stop = False
+                cell_is_push = False
+                pushable_blocks_here = []
+
+                for b in blocks_in_next:
+                    props = state.get_properties_of_block(b)
+                    if "STOP" in props:
+                        cell_is_stop = True
+                    if "PUSH" in props:
+                        cell_is_push = True
+                        pushable_blocks_here.append(b)
+
+                if cell_is_stop:
+                    # The chain is blocked by a wall/stop object
+                    blocked = True
+                    break
+                elif cell_is_push:
+                    # We found pushable objects, add them to chain and keep looking
+                    # (A push block effectively acts as a solid object pushing the next one)
+                    move_chain.extend(pushable_blocks_here)
+                    curr_x = next_x
+                    curr_y = next_y
+                else:
+                    # The cell is empty or contains non-blocking items (like empty ground or just an item)
+                    # The chain can move.
+                    break
+
+            # Execute the move if not blocked
+            if not blocked:
+                # Move in reverse order to avoid overlapping logic issues (push the furthest block first)
+                for b in reversed(move_chain):
+                    # Ensure we don't move the same block twice in one turn if multiple YOU blocks align
+                    # (In this simplified logic, we just move the distinct instances in the chain)
+                    state.move_block(b, b.x + dx, b.y + dy)
+                    moved_blocks_ids.add(b)
+
+    # 3. INTERACTION PHASE (SINK, DEFEAT, WIN, HOT)
+    # Interactions happen after movement.
+
+    # --- SINK Logic ---
+    # If any object overlaps a SINK object, BOTH are destroyed.
+    sink_blocks = state.get_blocks_by_property("SINK")
+    blocks_to_remove = set()
+
+    for sink in sink_blocks:
+        # Identify blocks in the same cell as the sink
+        cell_contents = state.get_blocks_in_cell(sink.x, sink.y)
+
+        # SINK only triggers if there is something *else* there (or multiple sinks)
+        # Usually SINK destroys itself and whatever is on it.
+        if len(cell_contents) > 1:
+            for b in cell_contents:
+                blocks_to_remove.add(b)
+
+    # Apply removal for SINK
+    for b in blocks_to_remove:
+        # Check if already removed to avoid errors
+        if b in state.get_blocks_in_cell(b.x, b.y):
+            state.remove_block(b)
+
+    # --- DEFEAT Logic ---
+    # If YOU overlaps DEFEAT, YOU is destroyed.
+    # We must refresh YOU blocks list because some might have been removed by SINK
+    current_you_blocks = state.get_blocks_by_property("YOU")
+    defeat_blocks = state.get_blocks_by_property("DEFEAT")
+
+    # Map defeat locations for quick lookup
+    defeat_locs = {(d.x, d.y) for d in defeat_blocks}
+
+    for you_b in current_you_blocks:
+        if (you_b.x, you_b.y) in defeat_locs:
+            state.remove_block(you_b)
+
+    # --- HOT Logic ---
+    # The rule "HOT" was induced. In standard logic, HOT destroys MELT objects.
+    # Since MELT is not listed in the prompt, HOT is passive here.
+    # However, we ensure the property is respected if we were to check overlapping interactions.
+    # (No state manipulation required for HOT without MELT).
+
+    # 4. OUTCOME PHASE
+    # Check for Win or Loss conditions
+
+    remaining_you = state.get_blocks_by_property("YOU")
+    win_blocks = state.get_blocks_by_property("WIN")
+    win_locs = {(w.x, w.y) for w in win_blocks}
+
+    # Default outcome
+    state.outcome = state.outcome.ONGOING
+
+    # Check WIN: Is any YOU on a WIN?
+    has_won = False
+    for you_b in remaining_you:
+        if (you_b.x, you_b.y) in win_locs:
+            has_won = True
+            break
+
+    if has_won:
+        state.outcome = state.outcome.WIN
+
+    # Check LOSE: Are there no YOU blocks left?
+    # (Win takes precedence if simultaneous, but usually you can't win if you don't exist.
+    # However, if you step on WIN and DEFEAT simultaneously, standard Baba logic is usually specific.
+    # Here we assume if you are destroyed, you cannot win, unless a separate YOU block triggers the win).
+    elif len(remaining_you) == 0:
+        state.outcome = state.outcome.LOSE
+
+    return state
